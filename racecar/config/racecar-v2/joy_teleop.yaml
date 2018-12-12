@@ -1,5 +1,5 @@
 joy_node:
-  deadzone: 0.01
+  deadzone: 0.1 # was 0.01
   autorepeat_rate: 20
   coalesce_interval: 0.01
 

@@ -1,12 +1,44 @@
 <!-- -*- mode: XML -*- -->
 <launch>
+
+	<!-- Args -->
+	<arg name="use_gazebo" default="false" />
   <arg name="racecar_version" default="racecar-v2" />
   <arg name="run_camera" default="false"/>
+  <arg name="use_kinect2" default="false" />
 
-
+  <!-- RACECAR -->
   <include file="$(find racecar)/launch/includes/$(arg racecar_version)-teleop.launch.xml">
     <arg name="racecar_version" value="$(arg racecar_version)" />
     <arg name="run_camera" value="$(arg run_camera)" />
   </include>
+
+  <group if="$(arg use_gazebo)">
+
+    <!-- Kinect / Freenect2 -->
+    <include file="$(find racecar)/launch/kinect2_bridge.launch" if="$(arg use_kinect2)" />
+
+    <!-- PX4flow -->
+    <include file="$(find px4flow)/launch/px4flow.launch" unless="$(arg use_gazebo)" />
+
+    <!-- YD LIDAR -->
+    <node name="ydlidar_node"  pkg="ydlidar"  type="ydlidar_node" output="screen" unless="$(arg use_gazebo)">
+      <param name="port"         type="string" value="/dev/ydlidar"/>  
+      <param name="baudrate"     type="int"    value="230400"/>
+      <param name="frame_id"     type="string" value="laser_link"/>
+      <param name="angle_fixed"  type="bool"   value="true"/>
+      <param name="low_exposure"  type="bool"   value="false"/>
+      <param name="heartbeat"    type="bool"   value="false"/>
+      <param name="resolution_fixed"    type="bool"   value="true"/>
+      <param name="angle_min"    type="double" value="-180" />
+      <param name="angle_max"    type="double" value="180" />
+      <param name="range_min"    type="double" value="0.08" />
+      <param name="range_max"    type="double" value="16.0" />
+      <param name="ignore_array" type="string" value="" />
+      <param name="samp_rate"    type="int"    value="9"/>
+      <param name="frequency"    type="double" value="10"/>
+    </node>
+
+  </group>
 
 </launch>
