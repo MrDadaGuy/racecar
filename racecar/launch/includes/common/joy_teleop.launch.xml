@@ -6,6 +6,8 @@
 
   <rosparam file="$(arg joy_teleop_config)" command="load" />
 
+  <param name="joy_node/dev" value="/dev/input/js0" />
+
   <node pkg="joy" type="joy_node" name="joy_node" />
 
   <node pkg="racecar" type="joy_teleop.py" name="joy_teleop" />

@@ -13,7 +13,7 @@
     <arg name="run_camera" value="$(arg run_camera)" />
   </include>
 
-  <group if="$(arg use_gazebo)">
+  <group unless="$(arg use_gazebo)">
 
     <!-- Kinect / Freenect2 -->
     <include file="$(find racecar)/launch/kinect2_bridge.launch" if="$(arg use_kinect2)" />
